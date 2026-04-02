@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Colors -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+
+    <!-- Light Theme -->
+    <color name="light_background">#FFF5F5F7</color>
+    <color name="light_display_bg">#FFFFFFFF</color>
+    <color name="light_number_btn_bg">#FFFFFFFF</color>
+    <color name="light_operator_btn_bg">#FFF0F0F0</color>
+    <color name="light_function_btn_bg">#FFA5A5A5</color>
+    <color name="light_equals_bg">#FF007AFF</color>
+    <color name="light_result_text">#FF1C1C1E</color>
+    <color name="light_formula_text">#FF636366</color>
+
+    <!-- Dark Theme -->
+    <color name="dark_background">#FF1C1C1E</color>
+    <color name="dark_display_bg">#FF2C2C2E</color>
+    <color name="dark_number_btn_bg">#FF3A3A3C</color>
+    <color name="dark_operator_btn_bg">#FF505050</color>
+    <color name="dark_function_btn_bg">#FF636366</color>
+    <color name="dark_equals_bg">#FF0A84FF</color>
+    <color name="dark_result_text">#FFFFFFFF</color>
+    <color name="dark_formula_text">#FFAEAEB2</color>
+
+    <!-- Common -->
+    <color name="orange">#FFFF9500</color>
+    <color name="orange_dark">#FFCC8000</color>
+</resources>

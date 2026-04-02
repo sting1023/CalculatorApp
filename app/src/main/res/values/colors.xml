@@ -27,4 +27,7 @@
     <!-- Common -->
     <color name="orange">#FFFF9500</color>
     <color name="orange_dark">#FFCC8000</color>
+
+    <!-- Launcher Icon -->
+    <color name="ic_launcher_background">#FFFF9500</color>
 </resources>

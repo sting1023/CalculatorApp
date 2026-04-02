@@ -38,7 +38,6 @@ class CalculatorViewModel @Inject constructor(
     private fun appendDigit(digit: String) {
         _state.update { currentState ->
             val newDisplay = if (currentState.isNewInput || currentState.display == "0") {
-                currentState.isError = false
                 digit
             } else {
                 currentState.display + digit
@@ -46,7 +45,8 @@ class CalculatorViewModel @Inject constructor(
             currentState.copy(
                 display = newDisplay,
                 isNewInput = false,
-                expression = if (currentState.isNewInput) newDisplay else currentState.expression + newDisplay
+                isError = false,
+                expression = if (currentState.isNewInput) newDisplay else currentState.expression + digit
             )
         }
     }
@@ -58,7 +58,7 @@ class CalculatorViewModel @Inject constructor(
             val newExpression = when {
                 currentState.pendingOperator != null && !currentState.isNewInput -> {
                     // Continue expression with pending operator
-                    currentState.expression.replaceSuffix(currentState.display) { "$currentValue $operator " }
+                    "${currentState.expression.dropLast(currentState.display.length)}$currentValue $operator "
                 }
                 currentState.pendingOperator == null -> {
                     // First operator
@@ -66,7 +66,7 @@ class CalculatorViewModel @Inject constructor(
                 }
                 else -> {
                     // Replace pending operator
-                    currentState.expression.replaceSuffix(currentState.pendingOperator!!) { "$operator " }
+                    currentState.expression.dropLast(currentState.pendingOperator!!.length + 1) + "$operator "
                 }
             }
 
@@ -128,21 +128,14 @@ class CalculatorViewModel @Inject constructor(
     }
 
     private fun clear() {
-        _state.update {
-            CalculatorState()
-        }
+        _state.update { CalculatorState() }
     }
 
     private fun delete() {
         _state.update { currentState ->
             if (currentState.isError || currentState.isNewInput) return@update currentState
 
-            val newDisplay = if (currentState.display.length <= 1) {
-                "0"
-            } else {
-                currentState.display.dropLast(1)
-            }
-
+            val newDisplay = if (currentState.display.length <= 1) "0" else currentState.display.dropLast(1)
             val newHasDecimal = newDisplay.contains(".")
 
             currentState.copy(
@@ -188,23 +181,6 @@ class CalculatorViewModel @Inject constructor(
                 isNewInput = true,
                 hasDecimal = newDisplay.contains(".")
             )
-        }
-    }
-
-    private fun String.replaceSuffix(oldSuffix: String, newSuffix: (String) -> String): String {
-        return if (this.endsWith(oldSuffix)) {
-            this.dropLast(oldSuffix.length) + newSuffix(oldSuffix)
-        } else {
-            this
-        }
-    }
-
-    private inline fun <T> T.replaceSuffix(oldSuffix: String, transform: (String) -> String): String {
-        val str = this.toString()
-        return if (str.endsWith(oldSuffix)) {
-            str.dropLast(oldSuffix.length) + transform(oldSuffix)
-        } else {
-            str
         }
     }
 }

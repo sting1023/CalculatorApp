@@ -45,8 +45,7 @@ class CalculatorViewModel @Inject constructor(
             currentState.copy(
                 display = newDisplay,
                 isNewInput = false,
-                isError = false,
-                expression = if (currentState.isNewInput) newDisplay else currentState.expression + digit
+                isError = false
             )
         }
     }
@@ -57,11 +56,13 @@ class CalculatorViewModel @Inject constructor(
 
             val newExpression = when {
                 currentState.pendingOperator != null && !currentState.isNewInput -> {
-                    // Continue expression with pending operator
-                    "${currentState.expression.dropLast(currentState.display.length)}$currentValue $operator "
+                    // User entered a number after an operator - calculate intermediate result
+                    val result = evaluateExpressionUseCase("${currentState.expression}$currentValue")
+                    val resultStr = result.getOrNull() ?: currentValue.toString()
+                    "${resultStr} $operator "
                 }
                 currentState.pendingOperator == null -> {
-                    // First operator
+                    // First operator pressed
                     "${currentState.display} $operator "
                 }
                 else -> {
@@ -88,8 +89,7 @@ class CalculatorViewModel @Inject constructor(
             currentState.copy(
                 display = newDisplay,
                 isNewInput = false,
-                hasDecimal = true,
-                expression = if (currentState.isNewInput) newDisplay else currentState.expression + "."
+                hasDecimal = true
             )
         }
     }
@@ -98,6 +98,7 @@ class CalculatorViewModel @Inject constructor(
         _state.update { currentState ->
             if (currentState.pendingOperator == null) return@update currentState
 
+            // Build complete expression: expression + display
             val fullExpression = currentState.expression + currentState.display
 
             evaluateExpressionUseCase(fullExpression).fold(

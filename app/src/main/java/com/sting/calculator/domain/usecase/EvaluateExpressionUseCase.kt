@@ -1,7 +1,6 @@
 package com.sting.calculator.domain.usecase
 
 import javax.inject.Inject
-import kotlin.math.pow
 
 class EvaluateExpressionUseCase @Inject constructor() {
 
@@ -52,11 +51,11 @@ class EvaluateExpressionUseCase @Inject constructor() {
                         }
                     } else {
                         val op = when (char) {
-                            '+' -> Operator.ADD
-                            '-' -> Operator.SUBTRACT
-                            '*' -> Operator.MULTIPLY
-                            '/' -> Operator.DIVIDE
-                            '%' -> Operator.PERCENT
+                            '+' -> Op.ADD
+                            '-' -> Op.SUBTRACT
+                            '*' -> Op.MULTIPLY
+                            '/' -> Op.DIVIDE
+                            '%' -> Op.PERCENT
                             else -> throw IllegalArgumentException("Unknown operator: $char")
                         }
                         tokens.add(Token.Operator(op))
@@ -73,7 +72,7 @@ class EvaluateExpressionUseCase @Inject constructor() {
         if (tokens.isEmpty()) return 0.0
 
         val numbers = mutableListOf<Double>()
-        val operators = mutableListOf<Operator>()
+        val operators = mutableListOf<Op>()
 
         var i = 0
         while (i < tokens.size) {
@@ -93,17 +92,17 @@ class EvaluateExpressionUseCase @Inject constructor() {
         while (j < operators.size) {
             val op = operators[j]
             when (op) {
-                Operator.MULTIPLY, Operator.DIVIDE, Operator.PERCENT -> {
+                Op.MULTIPLY, Op.DIVIDE, Op.PERCENT -> {
                     val left = numbers[j]
-                    val right = if (op == Operator.PERCENT) left * numbers[j + 1] / 100 else numbers[j + 1]
+                    val right = numbers[j + 1]
 
                     val result = when (op) {
-                        Operator.MULTIPLY -> left * numbers[j + 1]
-                        Operator.DIVIDE -> {
-                            if (numbers[j + 1] == 0.0) throw ArithmeticException("Division by zero")
-                            left / numbers[j + 1]
+                        Op.MULTIPLY -> left * right
+                        Op.DIVIDE -> {
+                            if (right == 0.0) throw ArithmeticException("Division by zero")
+                            left / right
                         }
-                        Operator.PERCENT -> left * numbers[j + 1] / 100
+                        Op.PERCENT -> left * right / 100
                         else -> left
                     }
 
@@ -120,8 +119,8 @@ class EvaluateExpressionUseCase @Inject constructor() {
         j = 0
         for (op in operators) {
             when (op) {
-                Operator.ADD -> result += numbers[j + 1]
-                Operator.SUBTRACT -> result -= numbers[j + 1]
+                Op.ADD -> result += numbers[j + 1]
+                Op.SUBTRACT -> result -= numbers[j + 1]
                 else -> {}
             }
             j++
@@ -141,10 +140,10 @@ class EvaluateExpressionUseCase @Inject constructor() {
 
     sealed class Token {
         data class Number(val value: Double) : Token()
-        data class Operator(val value: Operator) : Token()
+        data class Operator(val value: Op) : Token()
     }
 
-    enum class Operator {
+    enum class Op {
         ADD, SUBTRACT, MULTIPLY, DIVIDE, PERCENT
     }
 }

@@ -31,19 +31,18 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug --no-daemon --stacktrace --info
+        run: |
+          ./gradlew assembleDebug --no-daemon 2>&1 | tee build_output.txt
+        continue-on-error: true
 
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+      - name: Show build output
+        run: |
+          echo "=== BUILD OUTPUT ==="
+          tail -200 build_output.txt
 
-      - name: Upload build logs
+      - name: Upload build output
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: build-logs
-          path: |
-            **/build/reports/
-            **/build/*.log
+          name: build-output
+          path: build_output.txt

@@ -15,7 +15,7 @@ interface HistoryDao {
     @Query("SELECT * FROM history ORDER BY timestamp DESC LIMIT :limit")
     fun getRecent(limit: Int = 50): Flow<List<HistoryEntity>>
 
-    @Query("SELECT * FROM history WHERE is_favorite = 1 ORDER BY timestamp DESC")
+    @Query("SELECT * FROM history WHERE isFavorite = 1 ORDER BY timestamp DESC")
     fun getFavorites(): Flow<List<HistoryEntity>>
 
     @Query("DELETE FROM history WHERE id = :id")

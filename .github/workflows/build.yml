@@ -31,10 +31,11 @@ jobs:
       - name: Build APK
         run: ./gradlew assembleDebug --no-daemon
       
-      - name: Create Release
+      - name: Upload to Release
         uses: softprops/action-gh-release@v1
         with:
           files: app/build/outputs/apk/debug/app-debug.apk
+          overwrite: true
           draft: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -32,10 +32,9 @@ jobs:
         run: ./gradlew assembleDebug --no-daemon
       
       - name: Upload to Release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         with:
           files: app/build/outputs/apk/debug/app-debug.apk
-          overwrite: true
-          draft: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          allowUpdates: true
+          replace: true
+          token: ${{ secrets.GITHUB_TOKEN }}

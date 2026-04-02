@@ -35,6 +35,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           files: app/build/outputs/apk/debug/app-debug.apk
-          allowUpdates: true
-          replace: true
+          tag: v1.0.0
           token: ${{ secrets.GITHUB_TOKEN }}

@@ -39,7 +39,7 @@ jobs:
           keyPassword=${{ secrets.KEY_PASSWORD }}
           storePassword=${{ secrets.STORE_PASSWORD }}
           storeFile=keystore.jks
-          storeType=JKS
+          storeType=PKCS12
           EOF
           echo "keystore.properties created"
 

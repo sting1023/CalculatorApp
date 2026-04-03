@@ -31,11 +31,12 @@ jobs:
       - name: Build signed release APK
         run: ./gradlew assembleRelease --no-daemon
 
-      - name: Upload to Release
-        uses: ncipollo/release-action@v1
+      - name: List build outputs
+        run: find app/build/outputs -name "*.apk" -type f
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
-          artifacts: app/build/outputs/apk/release/app-release.apk
-          tag: v1.0.0
-          allowUpdates: true
-          replace: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          name: calculator-signed-apk
+          path: app/build/outputs/apk/release/
+          retention-days: 5

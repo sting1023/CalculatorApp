@@ -189,14 +189,27 @@ private fun CalculatorButtons(
             OperatorButton(text = "+", onClick = { onAction(CalculatorAction.Operator("+")) }, modifier = Modifier.weight(1f))
         }
 
-        // Row 5: 0 (span 2), ., =
+        // Row 5: 0 spans 2 columns, then . and = in equal remaining space
         Row(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            NumberButton(text = "0", onClick = { onAction(CalculatorAction.Digit("0")) }, modifier = Modifier.weight(2f))
-            NumberButton(text = ".", onClick = { onAction(CalculatorAction.Decimal) }, modifier = Modifier.weight(1f))
-            EqualsButton(onClick = { onAction(CalculatorAction.Equals) }, modifier = Modifier.weight(1f))
+            NumberButton(
+                text = "0",
+                onClick = { onAction(CalculatorAction.Digit("0")) },
+                modifier = Modifier
+                    .weight(1f)
+                    .aspectRatio(2f)
+            )
+            NumberButton(
+                text = ".",
+                onClick = { onAction(CalculatorAction.Decimal) },
+                modifier = Modifier.weight(1f)
+            )
+            EqualsButton(
+                onClick = { onAction(CalculatorAction.Equals) },
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 }

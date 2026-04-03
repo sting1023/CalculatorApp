@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -40,7 +42,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sting.calculator.domain.model.CalculatorAction
 import com.sting.calculator.ui.theme.Blue
-import com.sting.calculator.ui.theme.BlueDark
 import com.sting.calculator.ui.theme.DarkButtonText
 import com.sting.calculator.ui.theme.DarkFunctionButtonBackground
 import com.sting.calculator.ui.theme.DarkNumberButtonBackground
@@ -64,20 +65,25 @@ fun CalculatorScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(horizontal = 16.dp)
+                .navigationBarsPadding()
         ) {
-            // Display area (30%)
+            // Display area
             DisplayArea(
                 expression = state.expression,
                 display = state.display,
                 isError = state.isError,
-                modifier = Modifier.weight(0.3f)
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
             )
 
-            // Button area (70%)
+            // Button area — weight drives height, fillMaxWidth + navigationBarsPadding
             CalculatorButtons(
                 onAction = viewModel::onAction,
-                modifier = Modifier.weight(0.7f)
+                modifier = Modifier
+                    .weight(5f)
+                    .fillMaxWidth()
             )
         }
     }
@@ -93,13 +99,10 @@ private fun DisplayArea(
     val displayColor = if (isError) Color.Red else MaterialTheme.colorScheme.onBackground
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 16.dp),
+        modifier = modifier.padding(vertical = 12.dp),
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.Bottom
     ) {
-        // Expression line
         if (expression.isNotEmpty()) {
             Text(
                 text = expression,
@@ -110,11 +113,10 @@ private fun DisplayArea(
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 4.dp)
             )
         }
 
-        // Main display
         val displayFontSize = when {
             display.length > 15 -> 28.sp
             display.length > 9 -> 36.sp
@@ -142,8 +144,8 @@ private fun CalculatorButtons(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         // Row 1: AC, ±, %, ⌫, ÷
         Row(
@@ -190,7 +192,7 @@ private fun CalculatorButtons(
             OperatorButton(text = "+", onClick = { onAction(CalculatorAction.Operator("+")) }, modifier = Modifier.weight(1f))
         }
 
-        // Row 5: 0 spans 2 columns, then . and = in equal remaining space
+        // Row 5: 0 spans 2 cols, ., =
         Row(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -198,9 +200,8 @@ private fun CalculatorButtons(
             NumberButton(
                 text = "0",
                 onClick = { onAction(CalculatorAction.Digit("0")) },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(2f)
             )
-            Spacer(modifier = Modifier.weight(1f))
             NumberButton(
                 text = ".",
                 onClick = { onAction(CalculatorAction.Decimal) },
@@ -211,7 +212,6 @@ private fun CalculatorButtons(
                 modifier = Modifier.weight(1f)
             )
         }
-            }
     }
 }
 

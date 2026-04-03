@@ -22,39 +22,58 @@ jobs:
 
       - uses: android-actions/setup-android@v3
 
-      - name: Decode keystore from secrets
-        env:
-          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
-        run: |
-          echo "$KEYSTORE_BASE64" | base64 -d > app/keystore.jks
-          echo "keystore decoded"
-
       - name: Create local.properties
         run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-
-      - name: Create keystore.properties
-        run: |
-          cat > app/keystore.properties << 'EOF'
-          keyAlias=${{ secrets.KEY_ALIAS }}
-          keyPassword=${{ secrets.KEY_PASSWORD }}
-          storePassword=${{ secrets.STORE_PASSWORD }}
-          storeFile=keystore.jks
-          storeType=JKS
-          EOF
-          echo "keystore.properties created"
 
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Build signed release APK
-        run: ./gradlew assembleRelease --no-daemon
+      - name: Build unsigned release APK
+        run: ./gradlew assembleRelease --no-daemon -x validateSigningRelease
 
       - name: List build outputs
         run: find app/build/outputs -name "*.apk" -type f
 
-      - name: Verify signature
+      - name: Sign APK with apksigner (v1+v2+v3)
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
-          unzip -l app/build/outputs/apk/release/*.apk | grep "META-INF/.*\.RSA" && echo "APK is SIGNED" || echo "WARNING: APK may not be signed"
+          echo "$KEYSTORE_B64" | base64 -d > /tmp/keystore.p12
+          
+          # Convert PKCS12 to JKS for apksigner compatibility
+          keytool -importkeystore \
+            -srckeystore /tmp/keystore.p12 \
+            -srcstoretype PKCS12 \
+            -srcstorepass "${{ secrets.STORE_PASSWORD }}" \
+            -destkeystore /tmp/keystore.jks \
+            -deststoretype JKS \
+            -deststorepass "${{ secrets.STORE_PASSWORD }}" \
+            -noprompt
+          
+          # Sign with apksigner (v2 + v3 schemes)
+          $ANDROID_SDK_ROOT/build-tools/35.0.0/apksigner sign \
+            --ks /tmp/keystore.jks \
+            --ks-key-alias "${{ secrets.KEY_ALIAS }}" \
+            --ks-pass pass:"${{ secrets.STORE_PASSWORD }}" \
+            --key-pass pass:"${{ secrets.KEY_PASSWORD }}" \
+            --v1-signing-enabled true \
+            --v2-signing-enabled true \
+            --v3-signing-enabled true \
+            app/build/outputs/apk/release/app-release.apk
+
+      - name: Verify signature schemes
+        run: |
+          $ANDROID_SDK_ROOT/build-tools/35.0.0/apksigner verify -v app/build/outputs/apk/release/app-release.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: app/build/outputs/apk/release/*.apk
+          tag_name: v1.0.0
+          generate_release_notes: true
+          overwrite_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
@@ -62,11 +81,3 @@ jobs:
           name: calculator-signed-apk
           path: app/build/outputs/apk/release/
           retention-days: 5
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: app/build/outputs/apk/release/*.apk
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

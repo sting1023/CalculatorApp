@@ -192,7 +192,7 @@ private fun CalculatorButtons(
             OperatorButton(text = "+", onClick = { onAction(CalculatorAction.Operator("+")) }, modifier = Modifier.weight(1f))
         }
 
-        // Row 5: 0 spans 2 cols, ., =
+        // Row 5: 0, ., = (equal width)
         Row(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -200,7 +200,7 @@ private fun CalculatorButtons(
             NumberButton(
                 text = "0",
                 onClick = { onAction(CalculatorAction.Digit("0")) },
-                modifier = Modifier.weight(2f)
+                modifier = Modifier.weight(1f)
             )
             NumberButton(
                 text = ".",

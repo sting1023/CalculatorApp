@@ -211,6 +211,7 @@ private fun CalculatorButtons(
                 modifier = Modifier.weight(1f)
             )
         }
+            }
     }
 }
 

@@ -31,7 +31,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build unsigned release APK
-        run: ./gradlew assembleRelease --no-daemon -x validateSigningRelease
+        run: ./gradlew clean assembleRelease --no-daemon -x validateSigningRelease --no-build-cache
 
       - name: List build outputs
         run: find app/build/outputs -name "*.apk" -type f

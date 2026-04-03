@@ -22,9 +22,20 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = "appkey"
+            keyPassword = "StingDev2026!"
+            storeFile = file("calculator.p12")
+            storePassword = "StingDev2026!"
+            storeType = "PKCS12"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

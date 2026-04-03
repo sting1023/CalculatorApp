@@ -34,6 +34,6 @@ jobs:
       - name: Upload to Release
         uses: ncipollo/release-action@v1
         with:
-          artifact: app/build/outputs/apk/release/app-release.apk
+          artifacts: app/build/outputs/apk/release/app-release.apk
           tag: v1.0.0
           token: ${{ secrets.GITHUB_TOKEN }}

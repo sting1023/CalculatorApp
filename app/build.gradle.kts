@@ -26,7 +26,7 @@ android {
         create("release") {
             keyAlias = "appkey"
             keyPassword = "StingDev2026!"
-            storeFile = file("app/calculator.p12")
+            storeFile = file("${rootProject.projectDir}/app/calculator.p12")
             storePassword = "StingDev2026!"
             storeType = "PKCS12"
         }

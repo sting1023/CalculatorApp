@@ -191,24 +191,30 @@ private fun CalculatorButtons(
 
         // Row 5: 0 spans 2 columns, then . and = in equal remaining space
         Row(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .aspectRatio(4.25f),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             NumberButton(
                 text = "0",
                 onClick = { onAction(CalculatorAction.Digit("0")) },
                 modifier = Modifier
-                    .weight(1f)
-                    .aspectRatio(2f)
+                    .fillMaxHeight()
+                    .weight(1.5f)
             )
             NumberButton(
                 text = ".",
                 onClick = { onAction(CalculatorAction.Decimal) },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f)
             )
             EqualsButton(
                 onClick = { onAction(CalculatorAction.Equals) },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f)
             )
         }
     }

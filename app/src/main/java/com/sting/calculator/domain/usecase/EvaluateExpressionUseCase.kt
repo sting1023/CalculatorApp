@@ -74,9 +74,11 @@ class EvaluateExpressionUseCase @Inject constructor() {
                     stage1.add(t); i++; continue
                 }
                 val left = (stage1.removeLast() as Token.Number).value
-                val right = (tokens.getOrNull(i + 1) as? Token.Number)?.value ?: run {
-                    stage1.add(t); i++; return@while
+                val rightToken = tokens.getOrNull(i + 1)
+                if (rightToken !is Token.Number) {
+                    stage1.add(t); i++; continue
                 }
+                val right = rightToken.value
                 val result = when (t.value) {
                     Op.DIVIDE -> { if (right == 0.0) throw ArithmeticException("Division by zero"); left / right }
                     Op.MULTIPLY -> left * right

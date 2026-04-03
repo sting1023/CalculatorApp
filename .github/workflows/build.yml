@@ -26,22 +26,12 @@ jobs:
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
-          echo "$KEYSTORE_BASE64" | base64 -d > app/keystore.jks
+          echo "$KEYSTORE_BASE64" | base64 -d > app/calculator.p12
           echo "keystore decoded"
 
       - name: Create local.properties
         run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
-      - name: Create keystore.properties
-        run: |
-          cat > app/keystore.properties << 'EOF'
-          keyAlias=${{ secrets.KEY_ALIAS }}
-          keyPassword=${{ secrets.KEY_PASSWORD }}
-          storePassword=${{ secrets.STORE_PASSWORD }}
-          storeFile=keystore.jks
-          storeType=PKCS12
-          EOF
-          echo "keystore.properties created"
 
       - name: Make gradlew executable
         run: chmod +x gradlew

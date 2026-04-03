@@ -36,4 +36,6 @@ jobs:
         with:
           artifacts: app/build/outputs/apk/release/app-release.apk
           tag: v1.0.0
+          allowUpdates: true
+          replace: true
           token: ${{ secrets.GITHUB_TOKEN }}

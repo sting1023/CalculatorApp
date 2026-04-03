@@ -45,7 +45,8 @@ class CalculatorViewModel @Inject constructor(
                 currentState.isError -> digit
                 currentState.isNewInput -> digit
                 currentState.display == "0" -> digit
-                currentState.display.length >= 15 -> currentState.display  // 最多15位
+                currentState.display == "0." -> "0." + digit  // 小数点后追加
+                currentState.display.length >= 15 -> currentState.display
                 else -> currentState.display + digit
             }
             currentState.copy(

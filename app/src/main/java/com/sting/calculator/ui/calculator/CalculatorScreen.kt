@@ -115,9 +115,9 @@ private fun DisplayArea(
 
         // Main display
         val displayFontSize = when {
-            display.length > 15 -> 32.sp
-            display.length > 9 -> 40.sp
-            else -> 56.sp
+            display.length > 15 -> 28.sp
+            display.length > 9 -> 36.sp
+            else -> 52.sp
         }
 
         Text(
@@ -144,21 +144,22 @@ private fun CalculatorButtons(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Row 1: AC, ±, %, ÷
+        // Row 1: AC, ±, %, ⌫, ÷
         Row(
             modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             FunctionButton(text = "AC", onClick = { onAction(CalculatorAction.Clear) }, modifier = Modifier.weight(1f))
             FunctionButton(text = "±", onClick = { onAction(CalculatorAction.ToggleSign) }, modifier = Modifier.weight(1f))
             FunctionButton(text = "%", onClick = { onAction(CalculatorAction.Percent) }, modifier = Modifier.weight(1f))
+            FunctionButton(text = "⌫", onClick = { onAction(CalculatorAction.Delete) }, modifier = Modifier.weight(1f))
             OperatorButton(text = "÷", onClick = { onAction(CalculatorAction.Operator("÷")) }, modifier = Modifier.weight(1f))
         }
 
         // Row 2: 7, 8, 9, ×
         Row(
             modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             NumberButton(text = "7", onClick = { onAction(CalculatorAction.Digit("7")) }, modifier = Modifier.weight(1f))
             NumberButton(text = "8", onClick = { onAction(CalculatorAction.Digit("8")) }, modifier = Modifier.weight(1f))
@@ -169,7 +170,7 @@ private fun CalculatorButtons(
         // Row 3: 4, 5, 6, -
         Row(
             modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             NumberButton(text = "4", onClick = { onAction(CalculatorAction.Digit("4")) }, modifier = Modifier.weight(1f))
             NumberButton(text = "5", onClick = { onAction(CalculatorAction.Digit("5")) }, modifier = Modifier.weight(1f))
@@ -180,7 +181,7 @@ private fun CalculatorButtons(
         // Row 4: 1, 2, 3, +
         Row(
             modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             NumberButton(text = "1", onClick = { onAction(CalculatorAction.Digit("1")) }, modifier = Modifier.weight(1f))
             NumberButton(text = "2", onClick = { onAction(CalculatorAction.Digit("2")) }, modifier = Modifier.weight(1f))
@@ -191,7 +192,7 @@ private fun CalculatorButtons(
         // Row 5: 0 (span 2), ., =
         Row(
             modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             NumberButton(text = "0", onClick = { onAction(CalculatorAction.Digit("0")) }, modifier = Modifier.weight(2f))
             NumberButton(text = ".", onClick = { onAction(CalculatorAction.Decimal) }, modifier = Modifier.weight(1f))
@@ -301,7 +302,7 @@ private fun CalculatorButton(
 
     Box(
         modifier = modifier
-            .aspectRatio(1.5f)
+            .aspectRatio(1f)
             .scale(scale)
             .clip(RoundedCornerShape(16.dp))
             .background(animatedColor)
@@ -315,7 +316,7 @@ private fun CalculatorButton(
         Text(
             text = text,
             color = textColor,
-            fontSize = 32.sp,
+            fontSize = 28.sp,
             fontWeight = FontWeight.Medium
         )
     }

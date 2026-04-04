@@ -74,7 +74,7 @@ fun CalculatorScreen(
                 display = state.display,
                 isError = state.isError,
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(2f)
                     .fillMaxWidth()
             )
 
@@ -82,7 +82,7 @@ fun CalculatorScreen(
             CalculatorButtons(
                 onAction = viewModel::onAction,
                 modifier = Modifier
-                    .weight(5f)
+                    .weight(4f)
                     .fillMaxWidth()
             )
         }

@@ -145,7 +145,7 @@ private fun CalculatorButtons(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         // Row 1: AC, ±, %, ⌫, ÷
         Row(
